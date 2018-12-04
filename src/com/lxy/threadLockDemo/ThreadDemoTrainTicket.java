@@ -12,13 +12,27 @@ class ThreadTicket implements Runnable {
                 e.printStackTrace();
             }
 
-            sale();
+            sale();    //同步块
+            //syncSale();  //同步函数
         }
     }
 
     private void sale() {
-        System.out.println(Thread.currentThread().getName() + ", 出售第 " + (100 - trainCount + 1) + "张票");
-        trainCount--;
+        //同步块
+        synchronized (this) {   //<----同一时间只能有一个线程进入代码块
+            if (trainCount > 0) {
+                System.out.println(Thread.currentThread().getName() + ", 出售第 " + (100 - trainCount + 1) + "张票");
+                trainCount--;
+            }
+        }
+    }
+
+    private synchronized void syncSale() {   //this锁
+        //同步块
+        if (trainCount > 0) {
+            System.out.println(Thread.currentThread().getName() + ", 出售第 " + (100 - trainCount + 1) + "张票");
+            trainCount--;
+        }
     }
 }
 
